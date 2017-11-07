@@ -6,8 +6,14 @@ block content
   div.container
     form(method='POST' action='/tone')
       div.form-group
-        label(for='name') Name:
-        input#name.form-control(type='text', placeholder='first and last' name='name')
-      button.btn.btn-primary(type='submit') Sign up
+        label(for='tone') Tone:
+        input#tone.form-control(type='textarea', placeholder='JSON' name='toneInput')
+      button.btn.btn-primary(type='submit') Analyze tone
+
+    form(method='POST' action='/nlu')
+      div.form-group
+        label(for='nlu') Name:
+        input#nlu.form-control(type='textarea', placeholder='JSON' name='nluInput')
+      button.btn.btn-primary(type='submit') NLU
 
 

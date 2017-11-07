@@ -5,13 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
-var ToneAnalyzer = require('watson-developer-cloud').ToneAnalyzerV3;
-
-const tone_analyzer = new ToneAnalyzer({
-    username: 'd609b749-ea64-4f98-8d02-f8066222a35a',
-    password: 'INSERT YOUR PASSWORD FOR THE SERVICE HERE'
-});
-
 
 var db_uri = 'mongodb://admin:BostonFL17@ds249565.mlab.com:49565/team19';
 
