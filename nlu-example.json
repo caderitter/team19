@@ -1,7 +1,12 @@
 {
   "text": "I'm so happy!",
   "features": {
-    "concepts": {},
-    "keywords": {}
+    "concepts":{},
+    "entities":{},
+    "keywords":{},
+    "categories":{},
+    "emotion":{},
+    "sentiment":{},
+    "semantic_roles":{}
   }
 }
