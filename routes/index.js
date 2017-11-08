@@ -78,7 +78,7 @@ router.post('/nlu', function (req, res) {
     //     semantic_roles:{}
     //   };
     //   query['language'] = 'en';
-    
+
       nlu.analyze(text, function (err, result) {
         if (err) {
             console.log(err);
@@ -93,10 +93,10 @@ router.post('/nlu', function (req, res) {
         //     console.log(entities_array[i].sentiment.label);
         // }
     });
-  
+
     // }
 });
-  
+
 
 
 /* Setup Twitter */
@@ -109,15 +109,14 @@ var client = new Twitter({
 
 router.post('/tone/twitter', function (req, res) {
     var twitterToneText = { utterances: [] };
-
-    client.get('search/tweets/', {q: req.body.tweetInput, count: 50}, function(error, tweets, response) {
+    client.get('search/tweets/', {q: encodeURIComponent(req.body.tweetInput), count: 50}, function(error, tweets, response) {
         if (error) {
             console.log("Error: " + error);
             // console.log(tweets);
         } else {
             console.log("Number of results: " + tweets.search_metadata.count);
             // console.log(tweets.statuses.length);
-    
+
             for (let j in tweets.statuses) {
                 var tweet = tweets.statuses[j];
                 // console.log("truncated: " + tweet.truncated);
@@ -126,7 +125,7 @@ router.post('/tone/twitter', function (req, res) {
             }
             // console.log(tweets);
             // console.log("toneText: " + twitterToneText);
-    
+
             // Run Tone Analyzer
             console.log(twitterToneText.length);
             tone_analyzer.tone_chat(twitterToneText, function(err, tone) {
@@ -135,10 +134,10 @@ router.post('/tone/twitter', function (req, res) {
                 } else {
                     console.log("Tone Result");
                     console.log(JSON.stringify(tone, null, 2));
-    
+
                     var array = tone.utterances_tone;
                     var result = {};
-    
+
                     for(let i = 0; i < array.length; i++) {
                         var tones = array[i].tones;
                         for(j = 0; j < tones.length; j++) {
@@ -150,7 +149,7 @@ router.post('/tone/twitter', function (req, res) {
                             }
                         }
                     }
-    
+
                     keys = Object.keys(result);
                     vals = Object.keys(result).map(function(key){return result[key]});
                     res.render('tone_results', {keys: keys, vals: vals});
@@ -158,7 +157,7 @@ router.post('/tone/twitter', function (req, res) {
             });
         }
     });
-    
+
 });
 
 
