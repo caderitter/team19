@@ -18,6 +18,7 @@
     "popper.js": "^1.12.6",
     "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5",
+    "twitter": "^1.7.1",
     "watson-developer-cloud": "^2.42.0"
   }
 }
