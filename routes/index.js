@@ -54,17 +54,49 @@ router.post('/tone', function (req, res) {
 });
 
 router.post('/nlu', function (req, res) {
-  var text = JSON.parse(req.body.nluInput);
-  text['features'] = {entities: {emotion: true, limit: 1}};
-  console.log(text);
-  nlu.analyze(text, function (err, res) {
-      if (err) {
-          console.log(err);
-          return;
-      }
-      console.log(res);
-  });
+    var text = {}
+    text['text'] = req.body.nluInput.replace(/"/g,"\\\"");;
+    text['features'] = {"concepts":{},
+    "entities":{},
+    "keywords":{},
+    "categories":{},
+    "emotion":{},
+    "sentiment":{},
+    "semantic_roles":{}}
+    // arr = text.utterances;
+    // for(let i = 0; i < arr.length; i++) {
+    //   // console.log(arr[i].text);
+    //   query = {};
+    //   query['text'] = arr[i].text;
+    //   query['features'] = {
+    //     concepts:{},
+    //     entities:{},
+    //     keywords:{},
+    //     categories:{},
+    //     emotion:{},
+    //     sentiment:{},
+    //     semantic_roles:{}
+    //   };
+    //   query['language'] = 'en';
+    
+      nlu.analyze(text, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        var emot = result.emotion.document.emotion;
+        var keys = Object.keys(emot);
+        var vals = Object.keys(emot).map(function(key){return emot[key]});
+        res.render('nlu_results', {keys: keys, vals: vals});
+        // entities_array = res.entities;
+        // for(let i = 0; i < entities_array.length; i++) {
+        //     console.log(entities_array[i].sentiment.label);
+        // }
+    });
+  
+    // }
 });
+  
 
 
 /* Setup Twitter */
@@ -75,37 +107,28 @@ var client = new Twitter({
     access_token_secret: ACCESS_TOKEN_SECRET
 });
 
-/* Twitter Request */
-// var name = '%23IBMfinishline17';
-// client.get('statuses/user_timeline', {screen_name: "IBM"}, function(error, tweets, response) {
-//     if (error) {
-//         console.log("Error: " + error);
-//     } else {
-//         console.log("TWEETS");
-//         console.log(tweets);
-//     }
-// });
-
 router.post('/tone/twitter', function (req, res) {
     var twitterToneText = { utterances: [] };
+
     client.get('search/tweets/', {q: req.body.tweetInput, count: 50}, function(error, tweets, response) {
         if (error) {
             console.log("Error: " + error);
-            console.log(tweets);
+            // console.log(tweets);
         } else {
             console.log("Number of results: " + tweets.search_metadata.count);
-            console.log(tweets.statuses.length);
+            // console.log(tweets.statuses.length);
     
-            for (i in tweets.statuses) {
-                var tweet = tweets.statuses[i];
-                console.log("truncated: " + tweet.truncated);
-                console.log(tweet.text);
+            for (let j in tweets.statuses) {
+                var tweet = tweets.statuses[j];
+                // console.log("truncated: " + tweet.truncated);
+                // console.log(tweet.text);
                 twitterToneText.utterances.push({ text: tweet.text });
             }
             // console.log(tweets);
-            console.log("toneText: " + twitterToneText);
+            // console.log("toneText: " + twitterToneText);
     
             // Run Tone Analyzer
+            console.log(twitterToneText.length);
             tone_analyzer.tone_chat(twitterToneText, function(err, tone) {
                 if (err) {
                     console.log(err);
@@ -116,7 +139,7 @@ router.post('/tone/twitter', function (req, res) {
                     var array = tone.utterances_tone;
                     var result = {};
     
-                    for(i = 0; i < array.length; i++) {
+                    for(let i = 0; i < array.length; i++) {
                         var tones = array[i].tones;
                         for(j = 0; j < tones.length; j++) {
                             if(result.hasOwnProperty(tones[j].tone_id)){
@@ -128,21 +151,20 @@ router.post('/tone/twitter', function (req, res) {
                         }
                     }
     
-                    var keys = Object.keys(result);
-                    var vals = Object.keys(result).map(function(key){return result[key]});
+                    keys = Object.keys(result);
+                    vals = Object.keys(result).map(function(key){return result[key]});
                     res.render('tone_results', {keys: keys, vals: vals});
                 }
             });
         }
     });
+    
 });
-
-
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Team 19' });
+  res.render('index', { title: 'IFAT' });
 });
 
 module.exports = router;
