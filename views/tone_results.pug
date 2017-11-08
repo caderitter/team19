@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    p= resultJSON
+
+    canvas(id="pieChart", width="300", height="300")
+
+    script.
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        var keys = !{JSON.stringify(keys)};
+        var vals = !{JSON.stringify(vals)};
+
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var colors = [];
+        for(var i = 0; i < keys.length; i++) {
+            colors.push(getRandomColor());
+        }
+        var pieChart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'pie',
+
+            // The data for our dataset
+            data: {
+                labels: keys,
+                datasets: [{
+                    backgroundColor: colors,
+                    data: vals
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                maintainAspectRatio: false
+            }
+        });

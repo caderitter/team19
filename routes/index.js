@@ -3,7 +3,7 @@ var router = express.Router();
 var ToneAnalyzer = require('watson-developer-cloud/tone-analyzer/v3');
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js');
 
-var example_data = require('../example_data');
+var db = require('../db');
 
 const tone_analyzer = new ToneAnalyzer({
     username: 'd609b749-ea64-4f98-8d02-f8066222a35a',
@@ -23,8 +23,26 @@ router.post('/tone', function (req, res) {
       if (err) {
           console.log(err);
       } else {
-          console.log('tone endpoint:');
           console.log(JSON.stringify(tone, null, 2));
+
+          var array = tone.utterances_tone;
+          var result = {};
+
+          for(i = 0; i < array.length; i++) {
+              var tones = array[i].tones;
+              for(j = 0; j < tones.length; j++) {
+                  if(result.hasOwnProperty(tones[j].tone_id)){
+                      result[tones[j].tone_id] = result[tones[j].tone_id] + 1;
+                  }
+                  else {
+                      result[tones[j].tone_id] = 1;
+                  }
+              }
+          }
+
+          var keys = Object.keys(result);
+          var vals = Object.keys(result).map(function(key){return result[key]});
+          res.render('tone_results', {keys: keys, vals: vals});
       }
   });
 });
