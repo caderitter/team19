@@ -3,6 +3,8 @@ var router = express.Router();
 var ToneAnalyzer = require('watson-developer-cloud/tone-analyzer/v3');
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js');
 
+var example_data = require('../example_data');
+
 const tone_analyzer = new ToneAnalyzer({
     username: 'd609b749-ea64-4f98-8d02-f8066222a35a',
     password: 'nxz2REqlgbCh',
@@ -39,6 +41,9 @@ router.post('/nlu', function (req, res) {
       console.log(res);
   });
 });
+
+
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
