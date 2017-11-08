@@ -85,8 +85,8 @@ var name = '%23IBMfinishline17';
 //         console.log(tweets);
 //     }
 // });
-
-client.get('search/tweets/', {q: name, count: 100}, function(error, tweets, response) {
+var twitterToneText = { utterances: [] };
+client.get('search/tweets/', {q: name, count: 50}, function(error, tweets, response) {
     if (error) {
         console.log("Error: " + error);
         console.log(tweets);
@@ -98,8 +98,39 @@ client.get('search/tweets/', {q: name, count: 100}, function(error, tweets, resp
             var tweet = tweets.statuses[i];
             console.log("truncated: " + tweet.truncated);
             console.log(tweet.text);
+            twitterToneText.utterances.push({ text: tweet.text });
         }
         // console.log(tweets);
+        console.log("toneText: " + twitterToneText);
+
+        // Run Tone Analyzer
+        tone_analyzer.tone_chat(twitterToneText, function(err, tone) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Tone Result");
+                console.log(JSON.stringify(tone, null, 2));
+
+                var array = tone.utterances_tone;
+                var result = {};
+
+                for(i = 0; i < array.length; i++) {
+                    var tones = array[i].tones;
+                    for(j = 0; j < tones.length; j++) {
+                        if(result.hasOwnProperty(tones[j].tone_id)){
+                            result[tones[j].tone_id] = result[tones[j].tone_id] + 1;
+                        }
+                        else {
+                            result[tones[j].tone_id] = 1;
+                        }
+                    }
+                }
+
+                var keys = Object.keys(result);
+                var vals = Object.keys(result).map(function(key){return result[key]});
+                // res.render('tone_results', {keys: keys, vals: vals});
+            }
+        });
     }
 });
 
