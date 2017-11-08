@@ -5,21 +5,31 @@ block content
   div.container
     h1= title
     p Welcome to #{title}
-    form(method='POST' action='/tone').mt-5
-      div.form-group
-        label(for='tone') Tone:
-        input#tone.form-control(type='textarea', placeholder='JSON' name='toneInput')
-      button.btn.btn-primary(type='submit') Analyze tone
+    div.card.mb-5
+      div.card-header
+        h5 Tone analysis
+      div.card-body
+        form(method='POST' action='/tone').mb-5
+          div.form-group
+            label(for='tone') Enter utterance JSON:
+            input#tone.form-control(type='textarea', placeholder='{ "utterances": [ { "text": "Comment" } ] }' name='toneInput')
+          button.btn.btn-primary(type='submit') Analyze text
 
-    form(method='POST' action='/nlu').mt-5
-      div.form-group
-        label(for='nlu') NLU:
-        input#nlu.form-control(type='textarea', placeholder='Text' name='nluInput')
-      button.btn.btn-primary(type='submit') NLU
+        form(method='POST' action='/tone/twitter')
+          div.form-group
+            label(for='tweet') Search twitter:
+            input#tweet.form-control(type='text', placeholder='#IBMfinishline17' name='tweetInput')
+          button.btn.btn-primary(type='submit') Analyze twitter sentiment
 
-    form(method='POST' action='/tone/twitter').mt-5
-      div.form-group
-        label(for='tweet') Hashtag:
-        input#tweet.form-control(type='text', placeholder='Twitter search' name='tweetInput')
-      button.btn.btn-primary(type='submit') Analyze twitter sentiment
+    div.card
+      div.card-header
+        h5 Natural Language Understanding
+      div.card-body
+        form(method='POST' action='/nlu').mb-5
+          div.form-group
+            label(for='nlu') NLU:
+            input#nlu.form-control(type='textarea', placeholder='Text' name='nluInput')
+          button.btn.btn-primary(type='submit') NLU
+
+    
 
