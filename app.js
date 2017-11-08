@@ -7,6 +7,16 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 
 var db_uri = 'mongodb://admin:BostonFL17@ds249565.mlab.com:49565/team19';
+var db;
+
+MongoClient.connect(db_uri, function (err, database) {
+  if (err) {
+      console.log(err);
+  } else {
+      db = database;
+      console.log("Connected to database");
+  }
+});
 
 var index = require('./routes/index');
 var users = require('./routes/users');
