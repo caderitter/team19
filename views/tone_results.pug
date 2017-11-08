@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    p= resultJSON
 
     canvas(id="pieChart", width="300", height="300")
 
@@ -17,9 +16,6 @@ block content
 
         var keys = !{JSON.stringify(keys)};
         var vals = !{JSON.stringify(vals)};
-        var utterances = !{JSON.stringify(utterances)};
-        console.log("Utterances");
-        console.log(utterances);
 
         var ctx = document.getElementById('pieChart').getContext('2d');
         var colors = [];

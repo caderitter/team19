@@ -1,24 +1,24 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
   div.container
-    form(method='POST' action='/tone')
+    h1= title
+    p Welcome to #{title}
+    form(method='POST' action='/tone').mt-5
       div.form-group
         label(for='tone') Tone:
         input#tone.form-control(type='textarea', placeholder='JSON' name='toneInput')
       button.btn.btn-primary(type='submit') Analyze tone
 
-    form(method='POST' action='/nlu')
+    form(method='POST' action='/nlu').mt-5
       div.form-group
         label(for='nlu') NLU:
-        input#nlu.form-control(type='textarea', placeholder='JSON' name='nluInput')
+        input#nlu.form-control(type='textarea', placeholder='Text' name='nluInput')
       button.btn.btn-primary(type='submit') NLU
 
-    form(method='POST' action='/tone/twitter')
+    form(method='POST' action='/tone/twitter').mt-5
       div.form-group
         label(for='tweet') Twitter Search:
         input#tweet.form-control(type='text', placeholder='Search' name='tweetInput')
-      button.btn.btn-primary(type='submit') Analyze twitter sentiment
-
+      button.btn.btn-primary(type='submit') Analyze twitter tones
